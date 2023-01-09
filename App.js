@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, Button, Alert, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, Alert, Image, TouchableWithoutFeedback, Platform } from 'react-native';
 
 export default function App() {
   const handleTextPress = () => console.log('Press')
@@ -20,6 +20,7 @@ export default function App() {
       <TouchableWithoutFeedback onPress={handleButtonPress2}>
            <Image blurRadius={5} source={{uri: "https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg"}} style={styles.image} />
       </TouchableWithoutFeedback>
+      <View style={styles.box}></View>
    
       
 
@@ -31,13 +32,23 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: 'yellow',
   },
   text: {
     color: 'red',
   },
   image: {
     width: 200,
-    height: 200
+    height: 200,
+    borderWidth: 2,
+    borderColor: "red",
+    top: 30,
+    marginTop: Platform.OS === "ios" ? 50 : 30,
+    alignSelf: "center"
+  },
+  box: {
+    width: 50,
+    flex: 2,
+    backgroundColor: 'red',
   }
 });
