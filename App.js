@@ -1,54 +1,58 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, Button, Alert, Image, TouchableWithoutFeedback, Platform } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, Alert, Image, TouchableWithoutFeedback, Platform,  FlatList } from 'react-native';
+import { Header } from './components/Header';
+import { ListItem } from './components/ListItem';
+import { useState } from 'react';
+import { AddTodo } from './components/AddTodo';
 
 export default function App() {
-  const handleTextPress = () => console.log('Press')
+  const [listOfItems, setListOfItems] = useState([
+    {
+      text: 'Купить молоко',
+      id: 1,
+      complete: false
+    },
+    {
+      text: 'Купить хлеб',
+      id: 2,
+      complete: false
+    },
+    {
+      text: 'Купить сахар',
+      id: 3,
+      complete: false
+    },
+  ]);
 
-  const handleButtonPress = () => Alert.alert("MyApp", "Main message", [
-    {text: "Yes", onPress: () => console.log('Yes')},
-    {text: "No", onPress: () => console.log('No')}
-  ])
+  const handleAdd = (text) => {
+    if (!text || text.length === 0) return;
+    setListOfItems(list => {
+      return [
+        {text, id: Math.random().toString(36).substring(7)},
+        ...list
+      ]
+    })
+  }
 
-  const handleButtonPress2 = () => Alert.prompt("MyApp", "Main message", text => console.log(text))
+  const handleDelete = (id) => {
+    setListOfItems(listOfItems.filter(item => item.id !== id))
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text} onPress={handleTextPress}>Hello!</Text>
-      <Button title={'Press on me'} onPress={handleButtonPress} />
-      <Button title={'New button'} onPress={handleButtonPress2} />
-      <Image source={require('./assets/icon.png')} style={styles.image} />
-      <TouchableWithoutFeedback onPress={handleButtonPress2}>
-           <Image blurRadius={5} source={{uri: "https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg"}} style={styles.image} />
-      </TouchableWithoutFeedback>
-      <View style={styles.box}></View>
-   
-      
-
-      <StatusBar style="auto" />
+      <Header />
+      <AddTodo handleAdd={handleAdd} />
+      <View>
+        <FlatList data={listOfItems} renderItem={({ item }) => ( <ListItem item={item} handleDelete={handleDelete} />)} />
+      </View>
+      <StatusBar />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'yellow',
+    flex: 1
   },
-  text: {
-    color: 'red',
-  },
-  image: {
-    width: 200,
-    height: 200,
-    borderWidth: 2,
-    borderColor: "red",
-    top: 30,
-    marginTop: Platform.OS === "ios" ? 50 : 30,
-    alignSelf: "center"
-  },
-  box: {
-    width: 50,
-    flex: 2,
-    backgroundColor: 'red',
-  }
+
 });
